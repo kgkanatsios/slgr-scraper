@@ -10,3 +10,7 @@
    1. This command creates a file called `requirements.txt` that enumerates the installed packages: `pip freeze > requirements.txt`
    2. This file can then be used by collaborators to update virtual environments using the following command: `pip install -r requirements.txt`
 6. Diactivate the environment: `deactivate`.
+
+## CLI Tool
+
+Example cmd command: `python main.py https://www.slgr.gr/en/team/785/teamComp/20/ https://www.slgr.gr/en/teamschedule/845/21/222301/`
