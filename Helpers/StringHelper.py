@@ -9,4 +9,11 @@ def convertToKebabCase(s):
 
 
 def sanitizeString(string: str) -> str:
+    if string is None:
+        return ''
+
     return string.strip()
+
+
+def filenameFormater(string: str):
+    return sanitizeString(convertToKebabCase(string))
