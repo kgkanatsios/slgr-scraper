@@ -16,7 +16,7 @@ class Team:
         self.players = players
 
     def __str__(self) -> str:
-        return f"team-{sanitizeString(convertToKebabCase(self.name))}-season-{sanitizeString(convertToKebabCase(self.season))} "
+        return f"team-{sanitizeString(convertToKebabCase(self.name))}-season-{sanitizeString(convertToKebabCase(self.season))}"
 
     def toJson(self, dumps: bool = True):
         data: dict = {}
