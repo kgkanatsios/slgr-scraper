@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 
 from Models.Player import Player
 from Constants import UrlConstants
-from .Sanitizer import *
+from .StringHelper import *
 
 
 def htmlParser(html: str):
@@ -33,3 +33,9 @@ def getTeamName(dom: BeautifulSoup) -> str:
     return sanitizeString(dom.find(
         'div', class_='top-background-img').find(
         'img', class_='logo-title').parent.text)
+
+
+def getSeason(dom: BeautifulSoup) -> str:
+    return sanitizeString(dom.find(
+        'ul', class_='sf-filter').find(
+        'div', class_='f16').string)
