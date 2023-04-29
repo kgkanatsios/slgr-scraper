@@ -1,12 +1,41 @@
-from ..Enums.GameResultEnum import GameResultEnum
+import json
 
 
 class Game:
-    players: dict = {}
-    result: GameResultEnum = None
-    name: str = None
+    home_team: str = None
+    guest_team: str = None
+    date: str = None
+    matchday: str = None
+    home_score: int = None
+    guest_score: int = None
+    home_players: list = []
+    guest_players: list = []
     url: str = None
 
-    def __init__(self, players: dict, result: GameResultEnum, name: str, url: str):
-        self.name = name
+    def __init__(self, home_team: str, guest_team: str, date: str, matchday: str, home_score: int, guest_score: str, home_players: list, guest_players: list, url: str):
+        self.home_team = home_team
+        self.guest_team = guest_team
+        self.date = date
+        self.matchday = matchday
+        self.home_score = home_score
+        self.guest_score = guest_score
+        self.home_players = home_players
+        self.guest_players = guest_players
         self.url = url
+
+    def toJson(self, dumps: bool = True):
+        data: dict = {}
+        data['home_team'] = self.home_team
+        data['guest_team'] = self.guest_team
+        data['date'] = self.date
+        data['matchday'] = self.matchday
+        data['home_score'] = self.home_score
+        data['guest_score'] = self.guest_score
+        data['home_players'] = self.home_players
+        data['guest_players'] = self.guest_players
+        data['url'] = self.url
+
+        if dumps:
+            return json.dumps(data)
+
+        return data
