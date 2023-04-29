@@ -2,7 +2,9 @@ import typer
 from rich import print
 
 from Helpers.UrlHelper import getContentFromUrl
-from Helpers.DomParserHelper import htmlParser, getPlayers, getTeamName
+from Helpers.DomParserHelper import htmlParser, getPlayers, getTeamName, getSeason
+
+from Constants import LocalFoldersConstants
 
 from Models.Team import Team
 
@@ -13,7 +15,11 @@ def main(prev_season_squad_url: str = typer.Argument(..., help="Team's URL of th
 
     players: list = getPlayers(prev_season_squad_dom)
     team_name: str = getTeamName(prev_season_squad_dom)
-    prev_season_team = Team(team_name, prev_season_squad_url, players)
+    season: str = getSeason(prev_season_squad_dom)
+    prev_season_team = Team(team_name, season, prev_season_squad_url, players)
+
+    with open(LocalFoldersConstants.EXPORTS_FOLDER + str(prev_season_team) + ".json", "w") as outfile:
+        outfile.write(prev_season_team.toJson())
 
 
 if __name__ == "__main__":
