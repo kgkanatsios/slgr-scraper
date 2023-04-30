@@ -8,7 +8,7 @@ def convertToKebabCase(s):
                 lambda mo: ' ' + mo.group(0).lower(), s)).split()).replace(".", "")
 
 
-def sanitizeString(string: str) -> str:
+def sanitizeString(string: str | None) -> str:
     if string is None:
         return ''
 

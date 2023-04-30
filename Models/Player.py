@@ -2,9 +2,9 @@ import json
 
 
 class Player:
-    name: str = None
-    url: str = None
-    position: str = None
+    name: str
+    url: str
+    position: str
 
     def __init__(self, name: str, url: str, position: str):
         self.name = name
