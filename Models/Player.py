@@ -13,9 +13,9 @@ class Player:
 
     def toJson(self, dumps: bool = True):
         data: dict = {}
-        data['name'] = self.name
-        data['url'] = self.url
-        data['position'] = self.position
+        data["name"] = self.name
+        data["url"] = self.url
+        data["position"] = self.position
 
         if dumps:
             return json.dumps(data)

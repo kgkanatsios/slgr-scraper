@@ -25,21 +25,21 @@ class Game:
 
     def toJson(self, dumps: bool = True):
         data: dict = {}
-        data['home_team'] = self.home_team
-        data['guest_team'] = self.guest_team
-        data['date'] = self.date
-        data['matchday'] = self.matchday
-        data['home_score'] = self.home_score
-        data['guest_score'] = self.guest_score
-        data['url'] = self.url
-        data['home_players'] = []
-        data['guest_players'] = []
+        data["home_team"] = self.home_team
+        data["guest_team"] = self.guest_team
+        data["date"] = self.date
+        data["matchday"] = self.matchday
+        data["home_score"] = self.home_score
+        data["guest_score"] = self.guest_score
+        data["url"] = self.url
+        data["home_players"] = []
+        data["guest_players"] = []
 
         for home_player in self.home_players:
-            data['home_players'].append(home_player.toJson(False))
+            data["home_players"].append(home_player.toJson(False))
 
         for guest_player in self.guest_players:
-            data['guest_players'].append(guest_player.toJson(False))
+            data["guest_players"].append(guest_player.toJson(False))
 
         if dumps:
             return json.dumps(data)
