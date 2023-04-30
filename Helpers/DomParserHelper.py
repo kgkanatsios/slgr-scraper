@@ -77,9 +77,7 @@ def getFullGame(html: str, url: str) -> Game:
     date: str = getGameDate(dom)
     matchday: str = getGameMatchday(dom)
     home_score, guest_score = getGameScore(dom)
-    # players: list = getGamePlayers(dom)
-    home_players: list = []
-    guest_players: list = []
+    home_players, guest_players = getGamePlayers(dom)
 
     return Game(home_team, guest_team, date, matchday, home_score, guest_score, home_players, guest_players, url)
 
@@ -121,9 +119,33 @@ def getGameScore(dom: BeautifulSoup) -> tuple:
 
 
 def getGamePlayers(dom: BeautifulSoup) -> list:
-    return sanitizeString(dom.find(
-        'ul', class_='sf-filter').find(
-        'div', class_='f16').string)
+    all_squads = dom.find_all('div', class_='squads')
+    home_squad_elements = all_squads[0].find(
+        'div', 'tbody').find_all('div', 'trow')
+    guest_squad_elements = all_squads[2].find(
+        'div', 'tbody').find_all('div', 'trow')
+
+    home_squad = []
+    for home_squad_element in home_squad_elements:
+        url = sanitizeString(UrlConstants.BASE_URL +
+                             home_squad_element.a.get('href'))
+        pl_data = home_squad_element.find_all('div', 'ellipsis')
+        name = sanitizeString(pl_data[0].string)
+        position = sanitizeString(pl_data[1].string)
+
+        home_squad.append(Player(name, url, position))
+
+    guest_squad = []
+    for guest_squad_element in guest_squad_elements:
+        url = sanitizeString(UrlConstants.BASE_URL +
+                             guest_squad_element.a.get('href'))
+        pl_data = guest_squad_element.find_all('div', 'ellipsis')
+        name = sanitizeString(pl_data[0].string)
+        position = sanitizeString(pl_data[1].string)
+
+        guest_squad.append(Player(name, url, position))
+
+    return home_squad, guest_squad
 
 
 def getGameLink(html: str) -> str:
