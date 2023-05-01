@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class GameResultEnum(Enum):
-    LOSE = 1
-    DRAW = 2
-    WIN = 3
+class GameResultEnum(StrEnum):
+    LOSE = "Lose"
+    DRAW = "Draw"
+    WIN = "Win"
