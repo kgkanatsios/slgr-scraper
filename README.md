@@ -13,4 +13,10 @@
 
 ## CLI Tool
 
-Example cmd command: `python main.py https://www.slgr.gr/en/team/785/teamComp/20/ https://www.slgr.gr/en/teamschedule/845/21/222301/`
+Examples: 
+
+1. Stats for OLYMPIACOS F.C.: `python main.py https://www.slgr.gr/en/team/785/teamComp/20/ https://www.slgr.gr/en/teamschedule/845/21/222301/ --export`
+2. Stats for A.E.K. F.C.: `python main.py https://www.slgr.gr/en/team/837/teamComp/20/ https://www.slgr.gr/en/teamschedule/837/21/222301/ --export`
+3. Stats for PANATHINAIKOS F.C.: `python main.py https://www.slgr.gr/en/team/787/teamComp/20/ https://www.slgr.gr/en/teamschedule/847/21/222301/ --export`
+4. Stats for P.A.O.K. F.C.: `python main.py https://www.slgr.gr/en/team/849/teamComp/20/ https://www.slgr.gr/en/teamschedule/849/21/222301/ --export` 
+5. Stats for ARIS F.C.: `python main.py https://www.slgr.gr/en/team/838/teamComp/20/ https://www.slgr.gr/en/teamschedule/838/21/222301/ --export` 
