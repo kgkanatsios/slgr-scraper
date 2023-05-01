@@ -23,6 +23,9 @@ class Game:
         self.guest_players = guest_players
         self.url = url
 
+    def getGameSummary(self):
+        return str(self.home_team + " vs " + self.guest_team + ": " + str(self.home_score) + ":" + str(self.guest_score))
+
     def toJson(self, dumps: bool = True):
         data: dict = {}
         data["home_team"] = self.home_team
