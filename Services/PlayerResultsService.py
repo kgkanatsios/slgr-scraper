@@ -1,15 +1,16 @@
 from Models.Game import Game
+from Models.Team import Team
 
 from Enums.GameResultEnum import GameResultEnum
 
 
 class PlayerResultsService:
-    team_name: str
+    team: Team
     current_season_games: list
     result: dict
 
-    def __init__(self, team_name: str, current_season_games: list):
-        self.team_name = team_name
+    def __init__(self, team: Team, current_season_games: list):
+        self.team = team
         self.current_season_games = current_season_games
 
     def getPlayerResults(self):
@@ -33,26 +34,22 @@ class PlayerResultsService:
         return self.result
 
     def __getLabel(self, game: Game) -> str:
-        home_team: str = game.home_team
         opponent_name: str = game.home_team
         home_away_prefix: str = "(A)"
-        if home_team in self.team_name:
+        if game.home_team_url in self.team.url:
             opponent_name: str = game.guest_team
             home_away_prefix: str = "(H)"
 
         return str(home_away_prefix + " vs " + opponent_name + ": " + str(game.home_score) + ":" + str(game.guest_score))
 
     def __getSquad(self, game: Game) -> list:
-        home_team: str = game.home_team
-        if home_team in self.team_name:
+        if game.home_team_url in self.team.url:
             return game.home_players
 
         return game.guest_players
 
     def __getResultLabel(self, game: Game) -> GameResultEnum:
-        home_team: str = game.home_team
-
-        if home_team in self.team_name:
+        if game.home_team_url in self.team.url:
             my_score: int = game.home_score
             opponent_score: int = game.guest_score
         else:
