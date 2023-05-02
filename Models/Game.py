@@ -3,7 +3,9 @@ import json
 
 class Game:
     home_team: str
+    home_team_url: str
     guest_team: str
+    guest_team_url: str
     date: str
     matchday: str
     home_score: int
@@ -12,9 +14,11 @@ class Game:
     guest_players: list = []
     url: str
 
-    def __init__(self, home_team: str, guest_team: str, date: str, matchday: str, home_score: int, guest_score: int, home_players: list, guest_players: list, url: str):
+    def __init__(self, home_team: str, home_team_url: str, guest_team: str, guest_team_url: str, date: str, matchday: str, home_score: int, guest_score: int, home_players: list, guest_players: list, url: str):
         self.home_team = home_team
+        self.home_team_url = home_team_url
         self.guest_team = guest_team
+        self.guest_team_url = guest_team_url
         self.date = date
         self.matchday = matchday
         self.home_score = home_score
@@ -29,7 +33,9 @@ class Game:
     def toJson(self, dumps: bool = True):
         data: dict = {}
         data["home_team"] = self.home_team
+        data["home_team_url"] = self.home_team_url
         data["guest_team"] = self.guest_team
+        data["guest_team_url"] = self.guest_team_url
         data["date"] = self.date
         data["matchday"] = self.matchday
         data["home_score"] = self.home_score
