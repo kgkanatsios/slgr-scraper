@@ -1,5 +1,12 @@
 # Greek Super League scraper
 
+Get the following statistics from the [Official Greek Super League website](https://www.slgr.gr/en/) in JSON format:
+
+1. All the games of the selected team.
+2. Results per player for the selected team.
+3. Comparison between the starting 11 players and the previous season's roster.
+
+
 ## Python Environment
 
 1. Install [Python](https://www.python.org/).
@@ -7,16 +14,15 @@
 3. Create the virtual environment: `python -m virtualenv venv`.
 4. Activate the environment: `.\venv\Scripts\activate`.
 5. Add libraries and create a `requirements.txt` file:
-   1. This command creates a file called `requirements.txt` that enumerates the installed packages: `pip freeze > requirements.txt`
-   2. This file can then be used by collaborators to update virtual environments using the following command: `pip install -r requirements.txt`
-6. Diactivate the environment: `deactivate`.
+   1. This file can then be used by collaborators to update virtual environments using the following command: `pip install -r requirements.txt`.
+   2. This command creates a file called `requirements.txt` that enumerates the installed packages: `pip freeze > requirements.txt`.
+6. Deactivate the environment: `deactivate`.
 
 ## CLI Tool
 
-Examples: 
+1. Open a new terminal.
+2. Execute: `python main.py`
 
-1. Stats for OLYMPIACOS F.C.: `python main.py https://www.slgr.gr/en/team/785/teamComp/20/ https://www.slgr.gr/en/teamschedule/845/21/222301/ --export`
-2. Stats for A.E.K. F.C.: `python main.py https://www.slgr.gr/en/team/837/teamComp/20/ https://www.slgr.gr/en/teamschedule/837/21/222301/ --export`
-3. Stats for PANATHINAIKOS F.C.: `python main.py https://www.slgr.gr/en/team/787/teamComp/20/ https://www.slgr.gr/en/teamschedule/847/21/222301/ --export`
-4. Stats for P.A.O.K. F.C.: `python main.py https://www.slgr.gr/en/team/849/teamComp/20/ https://www.slgr.gr/en/teamschedule/849/21/222301/ --export` 
-5. Stats for ARIS F.C.: `python main.py https://www.slgr.gr/en/team/838/teamComp/20/ https://www.slgr.gr/en/teamschedule/838/21/222301/ --export` 
+### Demo
+
+
