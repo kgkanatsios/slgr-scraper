@@ -109,6 +109,22 @@ def getTeamSquadUrl(html: str) -> str:
     return str(UrlConstants.BASE_URL + squad_url.get("href"))
 
 
+def getTeamSeasons(html: str) -> dict:
+    dom = htmlParser(html)
+    seasons: dict = {}
+
+    seasons_urls_elements = dom.find(
+        "ul", class_="sf-filter").find("ul", class_="sub-current").find_all("a")
+    for seasons_urls_element in seasons_urls_elements:
+        link: str = str(UrlConstants.BASE_URL +
+                        seasons_urls_element.get("href")).replace("info", "teamComp")
+        season_name: str = sanitizeString(
+            seasons_urls_element.find("li").string)
+        seasons[link] = season_name
+
+    return seasons
+
+
 def getGameTeams(dom: BeautifulSoup) -> tuple:
     home_name: str = sanitizeString(dom.find(
         "div", class_="team").find(
