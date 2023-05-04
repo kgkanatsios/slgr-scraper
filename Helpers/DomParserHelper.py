@@ -73,22 +73,75 @@ def getMatchdaysLinks(html: str) -> list:
 def getFullGame(html: str, url: str) -> Game:
     dom = htmlParser(html)
 
-    home_team, guest_team = getGameTeams(dom)
+    home_name, home_url, guest_name, guest_url = getGameTeams(dom)
     date: str = getGameDate(dom)
     matchday: str = getGameMatchday(dom)
     home_score, guest_score = getGameScore(dom)
     home_players, guest_players = getGamePlayers(dom)
 
-    return Game(home_team, guest_team, date, matchday, home_score, guest_score, home_players, guest_players, url)
+    return Game(home_name, home_url, guest_name, guest_url, date, matchday, home_score, guest_score, home_players, guest_players, url)
+
+
+def getAllTeams(html: str) -> dict:
+    dom = htmlParser(html)
+    teams: dict = {}
+
+    team_urls_elements = dom.find("div", class_="emblem-section").find_all("a")
+    for team_url_element in team_urls_elements:
+        link: str = str(UrlConstants.BASE_URL + team_url_element.get("href"))
+        name: str = team_url_element.find("img").get("title")
+        teams[link] = name
+
+    return teams
+
+
+def getTeamScheduleUrl(html: str) -> str:
+    dom = htmlParser(html)
+    schedule_url = dom.find("a", {"data-nav-id": "teamSchedule"})
+
+    return str(UrlConstants.BASE_URL + schedule_url.get("href"))
+
+
+def getTeamSquadUrl(html: str) -> str:
+    dom = htmlParser(html)
+    squad_url = dom.find("a", {"data-nav-id": "teamComp"})
+
+    return str(UrlConstants.BASE_URL + squad_url.get("href"))
+
+
+def getTeamSeasons(html: str) -> dict:
+    dom = htmlParser(html)
+    seasons: dict = {}
+
+    seasons_urls_elements = dom.find(
+        "ul", class_="sf-filter").find("ul", class_="sub-current").find_all("a")
+    for seasons_urls_element in seasons_urls_elements:
+        link: str = str(UrlConstants.BASE_URL +
+                        seasons_urls_element.get("href")).replace("info", "teamComp")
+        season_name: str = sanitizeString(
+            seasons_urls_element.find("li").string)
+        seasons[link] = season_name
+
+    return seasons
 
 
 def getGameTeams(dom: BeautifulSoup) -> tuple:
-    return sanitizeString(dom.find(
+    home_name: str = sanitizeString(dom.find(
         "div", class_="team").find(
-        "div", class_="name").string), sanitizeString(dom.find(
-            "div", class_="team").find_next(
-            "div", class_="team").find(
-            "div", class_="name").string)
+        "div", class_="name").string)
+    home_url: str = sanitizeString(UrlConstants.BASE_URL + dom.find(
+        "div", class_="team").find(
+        "a").get("href"))
+    guest_name: str = sanitizeString(dom.find(
+        "div", class_="team").find_next(
+        "div", class_="team").find(
+        "div", class_="name").string)
+    guest_url: str = sanitizeString(UrlConstants.BASE_URL + dom.find(
+        "div", class_="team").find_next(
+        "div", class_="team").find(
+        "a").get("href"))
+
+    return home_name, home_url, guest_name, guest_url
 
 
 def getGameDate(dom: BeautifulSoup) -> str:
