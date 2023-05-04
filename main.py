@@ -6,8 +6,8 @@ import inquirer
 from rich.progress import track, Progress, SpinnerColumn, TextColumn
 
 from Helpers.UrlHelper import getContentFromUrl
-from Helpers.DomParserHelper import getFullTeam, getMatchdaysLinks, getGameLink, getFullGame, getAllTeams, getTeamScheduleUrl, getTeamSquadUrl
-from Helpers.FileHelper import exportToFile, exportToJsonFile
+from Helpers.DomParserHelper import getFullTeam, getMatchdaysLinks, getGameLink, getFullGame, getAllTeams, getTeamScheduleUrl, getTeamSquadUrl, getTeamSeasons
+from Helpers.FileHelper import exportToFile
 
 from Services.SeasonComparisonService import SeasonComparisonService
 from Services.PlayerResultsService import PlayerResultsService
@@ -53,7 +53,7 @@ def main():
         team_name, matchdays_urls = getMatchdaysLinks(team_schedule_html)
 
     game_urls = []
-    for matchdays_url in track(matchdays_urls, description="Fetching game urls..."):
+    for matchdays_url in track(matchdays_urls, description="Fetching games..."):
         matchday_html = getContentFromUrl(matchdays_url)
         game_link = getGameLink(matchday_html)
         if game_link is not None:
@@ -70,8 +70,8 @@ def main():
             "services",
             message="What are you interested in?",
             choices=[("All the games", "all_games"), ("Results per player", "player_results"),
-                     ("Compare squad with previous season", "season_comparison")],
-            default=["all_games", "player_results"],
+                     ("Compare starting 11 players with a previous season's roster", "season_comparison")],
+            default=[],
         ),
     ]
     service_answer = inquirer.prompt(service_question)
@@ -83,44 +83,40 @@ def main():
     if "player_results" in service_answer["services"]:
         players_stats = PlayerResultsService(team, games)
         players_stats_result = players_stats.getPlayerResults()
-        exportToJsonFile(team_name + "-player-results",
-                         json.dumps(players_stats_result))
+        exportToFile(team_name + "-player-results",
+                     json.dumps(players_stats_result))
 
-    return
-    prev_season_squad_html = getContentFromUrl(prev_season_squad_url)
-    prev_season_team = getFullTeam(
-        prev_season_squad_html, prev_season_squad_url)
+    if "season_comparison" in service_answer["services"]:
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            transient=True,
+        ) as progress:
+            progress.add_task(
+                description="Getting previous seasons...", total=None)
+            team_html = getContentFromUrl(team_url)
+            seasons = getTeamSeasons(team_html)
 
-    current_season_schedule_html = getContentFromUrl(current_season_schedule)
-    team_name, matchdays_urls = getMatchdaysLinks(current_season_schedule_html)
+        season_question = [
+            inquirer.List('season',
+                          message="Select the season to compare:",
+                          choices=seasons.values(),
+                          ),
+        ]
+        season_answer = inquirer.prompt(season_question)
+        season = {key: value for (
+            key, value) in seasons.items() if value == season_answer['season']}
+        season_url = list(season.keys())[0]
+        season_label = list(season.values())[0]
 
-    game_urls = []
-    for matchdays_url in track(matchdays_urls, description="Fetching game urls..."):
-        matchday_html = getContentFromUrl(matchdays_url)
-        game_link = getGameLink(matchday_html)
-        if game_link is not None:
-            game_urls.append(game_link)
+        season_squad_html = getContentFromUrl(season_url)
+        season_team = getFullTeam(season_squad_html, season_url)
 
-    games = []
-    for game_url in track(game_urls, description="Fetching squads..."):
-        game_html = getContentFromUrl(game_url)
-        game = getFullGame(game_html, game_url)
-        games.append(game)
+        season_comparison = SeasonComparisonService(season_team, games)
+        season_comparison_result = season_comparison.getComparison()
 
-    season_comparison = SeasonComparisonService(prev_season_team, games)
-    season_comparison_result = season_comparison.getComparison()
-
-    players_stats = PlayerResultsService(team_name, games)
-    players_stats_result = players_stats.getPlayerResults()
-
-    if file_export:
-        exportToFile(team_name + "-games-squads",
-                     json.dumps(list(map(lambda game: game.toJson(False), games))))
-        exportToFile(prev_season_team, prev_season_team.toJson())
-        exportToFile(team_name + "-season-comparison",
+        exportToFile(team_name + "-season-comparison-vs-" + season_label,
                      json.dumps(season_comparison_result))
-        exportToJsonFile(team_name + "-player-results",
-                         json.dumps(players_stats_result))
 
 
 if __name__ == "__main__":
